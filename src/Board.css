@@ -3,4 +3,10 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    padding: 10px;
+}
+
+.main-board {
+    padding: 10px;
+    background-color: rgb(7, 75, 11);
 }
