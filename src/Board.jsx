@@ -15,7 +15,6 @@ export default function Board(props) {
   useEffect(() => {
     setFirstClick(true);
     let ar = [];
-    let ind = 0;
     for (var i = 0; i < props.rows; i++) {
       let row = [];
       ar.push(row);
@@ -48,6 +47,10 @@ export default function Board(props) {
     return "1fr ".repeat(props.rows);
   }
 
+  function getRef(row, col) {
+    return ref.current[(row) + " " + (col)]
+  }
+
   function updateSquares() {
     for (let i = 0; i < props.rows; i++) {
       for (let j = 0; j < props.cols; j++) {
@@ -77,16 +80,7 @@ export default function Board(props) {
               newCol + k >= 0 &&
               tempBoard[newRow + j][newCol + k] !== -1
             ) {
-              console.log(
-                "incing: (" +
-                  (newRow + j) +
-                  ", " +
-                  (newCol + k) +
-                  ") around: " +
-                  newRow +
-                  " " +
-                  newCol
-              );
+              
               tempBoard[newRow + j][newCol + k]++;
             }
           }
@@ -108,11 +102,45 @@ export default function Board(props) {
       generateMines(row, col);
     }
     setFirstClick(false);
+    if(board[row][col] === 0) {
+      clearAdjacent(parseInt(row), parseInt(col))
+    }
     updateSquares();
   }
 
+  async function clearAdjacent(row, col) {
+
+    for(let i = -1; i < 2; i += 2) {      
+      if(col+i >= 0 && col+i < props.cols) {
+        if(board[(row)][(col+i)] === 0 && !getRef(row, col+i).getStatus()) {
+          await getRef(row, col+i).reveal();
+          clearAdjacent(row,col+i)
+        } 
+      }
+    
+      if(row+i >= 0 && row + i < props.rows) {
+        if(board[(row+i)][(col)] === 0 && !getRef(row + i, col).getStatus()) {
+          await getRef(row+i, col).reveal();
+          clearAdjacent(row+i,col)
+        } 
+      }
+    }
+
+    for(let j = -1; j < 2; j++) {
+      for(let k = -1; k < 2; k++) {
+        if(inBounds(row + j, col +k)) {
+          await getRef(row + j, col + k).reveal();
+        }
+      }
+    }
+  }
+
+  function inBounds(row ,col) {
+    return row >= 0 && col >= 0 && col < props.cols && row < props.rows;
+  }
+
   return (
-    <div className="board">
+    <div className="board">updateValue(
       I am board with {props.cols} columns and {props.rows} rows with{" "}
       {props.mines} mines resulting in a mine percent of{" "}
       {Math.round((props.mines / (props.rows * props.cols)) * 1000) / 10 + "%"}
