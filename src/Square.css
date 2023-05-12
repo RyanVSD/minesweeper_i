@@ -1,33 +1,36 @@
 .square-hide {
-    display: inline;
-    background-color: rgb(172, 244, 132);
-    height: 25px;
-    width: 25px;
-    line-height: 25px;
-    margin: 0px;
-    padding: 0px;
-    user-select: none;
-    box-shadow: 0px;
-    border: 1px solid black;
+  display: inline;
+  background-color: rgb(172, 244, 132);
+  height: 25px;
+  width: 25px;
+  line-height: 25px;
+  margin: 0px;
+  padding: 0px;
+  user-select: none;
+  box-shadow: 0px;
+  border: 1px solid black;
 }
 
 .square-show {
-    display: inline;
-    background-color: rgb(167, 167, 167);
-    height: 25px;
-    width: 25px;
-    line-height: 25px;
-    margin: 0px;
-    padding: 0px;
-    user-select: none;
-    box-shadow: 0px;
-    border: 1px solid black;
+  display: inline;
+  background-color: rgb(167, 167, 167);
+  height: 25px;
+  width: 25px;
+  line-height: 25px;
+  margin: 0px;
+  padding: 0px;
+  user-select: none;
+  box-shadow: 0px;
+  border: 1px solid black;
 }
 
+.mine {
+  background-color: red;
+}
 
-
-.square-show:hover, .square-hide:hover {
-    background-color: lightgray;
-    transition: 0.05s;
-    cursor: pointer;
-} 
+.square-show:hover,
+.square-hide:hover {
+  background-color: lightgray;
+  transition: 0.05s;
+  cursor: pointer;
+}

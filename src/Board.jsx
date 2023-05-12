@@ -8,29 +8,31 @@ export default function Board(props) {
   //Holds board data
   const [board, setBoard] = useState([]);
   //Records whether the first mine is clicked
-  const [firstClick, setFirstClick] = useState(false);
+  const [firstClick, setFirstClick] = useState(true);
   const [ids, setIds] = useState([]);
   const ref = useRef({});
   //Inits empty board
   useEffect(() => {
+    setFirstClick(true);
     let ar = [];
-    for (var i = 0; i < props.cols; i++) {
+    let ind = 0;
+    for (var i = 0; i < props.rows; i++) {
       let row = [];
       ar.push(row);
     }
-    for (i = 0; i < props.cols; i++) {
-      for (var j = 0; j < props.rows; j++) {
+    for (i = 0; i < props.rows; i++) {
+      for (var j = 0; j < props.cols; j++) {
         ar[i].push(c.CONSTANTS.Empty);
       }
     }
     setBoard(ar);
     let bar = [];
-    for (i = 0; i < props.cols; i++) {
+    for (i = 0; i < props.rows; i++) {
       let row = [];
       bar.push(row);
     }
-    for (i = 0; i < props.cols; i++) {
-      for (j = 0; j < props.rows; j++) {
+    for (i = 0; i < props.rows; i++) {
+      for (j = 0; j < props.cols; j++) {
         bar[i].push(uuidv4());
       }
     }
@@ -48,29 +50,50 @@ export default function Board(props) {
 
   function updateSquares() {
     for (let i = 0; i < props.rows; i++) {
-      for (let j = 0; j < props.rows; j++) {
-        console.log(ref.current[i + " " + j].updateValue(board[i][j]));
+      for (let j = 0; j < props.cols; j++) {
+        ref.current[i + " " + j].updateValue(board[i][j]);
       }
     }
   }
 
   function generateMines(row, col) {
-    console.log("genning");
     let tempBoard = board;
     let i = 0;
     while (i < props.mines) {
       let newRow = getRandomInt(props.rows);
       let newCol = getRandomInt(props.cols);
       if (
-        tempBoard[newRow][newCol] === 0 &&
-        (newRow !== row || newCol !== col)
+        tempBoard[newRow][newCol] !== -1 &&
+        (newRow !== row || newCol !== col) &&
+        Math.abs(newRow - row) + Math.abs(newCol - col) > 3
       ) {
-        console.log("adding mine at: " + newRow + " " + newCol);
-        tempBoard[newRow][newCol] = c.CONSTANTS.Mine;
+        for (var j = -1; j < 2; j++) {
+          for (var k = -1; k < 2; k++) {
+            tempBoard[newRow][newCol] = c.CONSTANTS.Mine;
+            if (
+              newRow + j < props.rows &&
+              newRow + j >= 0 &&
+              newCol + k < props.cols &&
+              newCol + k >= 0 &&
+              tempBoard[newRow + j][newCol + k] !== -1
+            ) {
+              console.log(
+                "incing: (" +
+                  (newRow + j) +
+                  ", " +
+                  (newCol + k) +
+                  ") around: " +
+                  newRow +
+                  " " +
+                  newCol
+              );
+              tempBoard[newRow + j][newCol + k]++;
+            }
+          }
+        }
         i++;
       }
     }
-    console.log(tempBoard);
     setBoard(tempBoard);
   }
 
@@ -81,9 +104,11 @@ export default function Board(props) {
   function clickSquare(pos) {
     let row = pos.split(" ")[0];
     let col = pos.split(" ")[1];
-    if (!firstClick) {
+    if (firstClick) {
       generateMines(row, col);
     }
+    setFirstClick(false);
+    updateSquares();
   }
 
   return (
@@ -93,16 +118,16 @@ export default function Board(props) {
       {Math.round((props.mines / (props.rows * props.cols)) * 1000) / 10 + "%"}
       <div
         className="main-board"
-        style={{ display: "grid", gridTemplateColumns: getCols() }}
+        style={{ display: "grid", gridTemplateRows: getRows() }}
       >
         {board.map((row, rowInd) => {
           return (
-            <div style={{ display: "grid", gridTemplateRows: getRows() }}>
+            <div style={{ display: "grid", gridTemplateColumns: getCols() }}>
               {row.map((item, colInd) => {
                 return (
                   <Square
                     key={ids[rowInd][colInd]}
-                    revealed={true}
+                    revealed={false}
                     value={board[rowInd][colInd]}
                     row={rowInd}
                     col={colInd}
@@ -121,7 +146,6 @@ export default function Board(props) {
           );
         })}
       </div>
-      <button onClick={() => updateSquares()}>logarithm</button>
     </div>
   );
 }

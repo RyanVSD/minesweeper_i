@@ -17,12 +17,18 @@ const Square = forwardRef(function Square(props, ref) {
         },
       };
     },
-    []
+    [props.col, props.row]
   );
   if (revealed) {
     return (
+      <button className={"square-show " + (value === -1 ? "mine" : "")}>
+        {value}
+      </button>
+    );
+  } else {
+    return (
       <button
-        className="square-show"
+        className={"square-hide " + (value === -1 ? "mine" : "")}
         onClick={() => {
           setRevealed(!revealed);
           props.onClick(props.row + " " + props.col);
@@ -30,16 +36,6 @@ const Square = forwardRef(function Square(props, ref) {
       >
         {value}
       </button>
-    );
-  } else {
-    return (
-      <button
-        className="square-hide"
-        onClick={() => {
-          setRevealed(!revealed);
-          props.onClick(props.row + " " + props.col);
-        }}
-      ></button>
     );
   }
 });
