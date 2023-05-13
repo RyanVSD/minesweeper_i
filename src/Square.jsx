@@ -59,7 +59,7 @@ const Square = forwardRef(function Square(props, ref) {
           (value === -1 ? "mine " : value + " square-show ")
         }
       >
-        {value === -1 ? "" : value}
+        {value === -1 || value === 0 ? "" : value}
       </button>
     );
   } else {

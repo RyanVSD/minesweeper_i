@@ -4,6 +4,8 @@ import Square from "./Square";
 import "./Board.css";
 import { uuidv4 } from "@firebase/util";
 import flag from "./images/flag.jpg";
+import clock from "./images/clock.png";
+import Timer from "./Timer.jsx";
 
 export default function Board(props) {
   //Holds board data
@@ -13,10 +15,13 @@ export default function Board(props) {
   const [ids, setIds] = useState([]);
   const [flagCount, setFlagCount] = useState(0);
   const ref = useRef({});
+  const timerRef = useRef(null);
   //Inits empty board
   useEffect(() => {
     setFlagCount(0);
     setFirstClick(true);
+    timerRef.current?.resetTime();
+    timerRef.current?.endTime();
     let ar = [];
     for (var i = 0; i < props.rows; i++) {
       let row = [];
@@ -109,6 +114,8 @@ export default function Board(props) {
     let row = pos.split(" ")[0];
     let col = pos.split(" ")[1];
     if (firstClick) {
+      timerRef.current.resetTime();
+      timerRef.current.startTime();
       generateMines(row, col);
     }
     setFirstClick(false);
@@ -121,6 +128,8 @@ export default function Board(props) {
     }
     updateSquares();
   }
+
+  function clickMine() {}
 
   async function clearAdjacent(row, col) {
     let tempFlags = 0;
@@ -170,13 +179,12 @@ export default function Board(props) {
         e.preventDefault();
       }}
     >
-      updateValue I am board with {props.cols} columns and {props.rows} rows
-      with {props.mines} mines resulting in a mine percent of{" "}
-      {Math.round((props.mines / (props.rows * props.cols)) * 1000) / 10 + "%"}
       <div className="game">
         <div className="top-bar">
           <img className="flag-logo" src={flag} alt="flags" />
           <div className="flag-count">{props.mines - flagCount}</div>
+          <img className="clock-image" src={clock} alt="clock" />
+          <Timer ref={(e) => (timerRef.current = e)} />
         </div>
         <div
           className="main-board"
@@ -202,6 +210,7 @@ export default function Board(props) {
                       }}
                       onClick={(pos) => clickSquare(pos)}
                       onRight={(bool) => incFlag(bool)}
+                      clickMine={() => clickMine()}
                     />
                   );
                 })}
