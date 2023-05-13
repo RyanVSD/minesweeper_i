@@ -66,10 +66,8 @@ const Square = forwardRef(function Square(props, ref) {
     return (
       <button
         className={
-          "square-hide-" +
-          getChecker() +
-          " square-hide " +
-          (value === -1 ? "mine " : "")
+          "square-hide-" + getChecker() + " square-hide "
+          //(value === -1 ? "mine " : "")
         }
         onClick={() => {
           if (!isFlagged) {

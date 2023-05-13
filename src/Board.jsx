@@ -136,7 +136,7 @@ export default function Board(props) {
   }
 
   function clickMine() {
-    timerRef.current.stopTimer();
+    timerRef.current.endTime();
     setGameOver(true);
   }
 
