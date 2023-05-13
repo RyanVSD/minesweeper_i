@@ -11,7 +11,7 @@ const Timer = forwardRef(function Timer(props, ref) {
 			await timeout(1000);
 			setTime(time + 1);
 		}
-		if (timerOn) {
+		if (timerOn && time < 999) {
 			wait();
 		}
 	}, [timerOn, time]);

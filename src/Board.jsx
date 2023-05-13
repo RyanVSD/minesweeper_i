@@ -20,12 +20,45 @@ export default function Board(props) {
 	const timerRef = useRef(null);
 	//Inits empty board
 	useEffect(() => {
+		const resetAll = () => {
+			setFlagCount(0);
+			setFirstClick(true);
+			setGameOver(false);
+			setWinner(false);
+
+			let ar = [];
+			for (var i = 0; i < props.rows; i++) {
+				let row = [];
+				ar.push(row);
+			}
+			for (i = 0; i < props.rows; i++) {
+				for (var j = 0; j < props.cols; j++) {
+					ar[i].push(c.CONSTANTS.Empty);
+				}
+			}
+			setBoard(ar);
+			let bar = [];
+			for (i = 0; i < props.rows; i++) {
+				let row = [];
+				bar.push(row);
+			}
+			for (i = 0; i < props.rows; i++) {
+				for (j = 0; j < props.cols; j++) {
+					bar[i].push(uuidv4());
+				}
+			}
+			setIds(bar);
+		};
+		resetAll();
+		timerRef.current?.endTime();
+	}, [props.cols, props.rows, props.mines]);
+
+	const resetAll = () => {
 		setFlagCount(0);
 		setFirstClick(true);
 		setGameOver(false);
 		setWinner(false);
-		timerRef.current?.resetTime();
-		timerRef.current?.endTime();
+
 		let ar = [];
 		for (var i = 0; i < props.rows; i++) {
 			let row = [];
@@ -48,7 +81,8 @@ export default function Board(props) {
 			}
 		}
 		setIds(bar);
-	}, [props.cols, props.rows, props.mines]);
+		timerRef.current?.endTime();
+	};
 
 	function getGameOver() {
 		return gameOver;
@@ -64,11 +98,11 @@ export default function Board(props) {
 
 	//Returns col number of 1frs
 	function getCols() {
-		return "1fr ".repeat(props.cols);
+		return "35px ".repeat(props.cols);
 	}
 	//Returns row number of 1frs
 	function getRows() {
-		return "1fr ".repeat(props.rows);
+		return "35px ".repeat(props.rows);
 	}
 
 	function getRef(row, col) {
@@ -253,8 +287,18 @@ export default function Board(props) {
 				e.preventDefault();
 			}}
 		>
+			<button className="new-game-button" onClick={() => resetAll()}>
+				New Game
+			</button>
 			<div className="game">
 				<div className="top-bar">
+					{gameOver ? (
+						<div className="game-over-text">
+							{winner ? "You win!" : "You lose"}
+						</div>
+					) : (
+						<></>
+					)}
 					<img className="flag-logo" src={flag} alt="flags" />
 					<div className="flag-count">{props.mines - flagCount}</div>
 					<img className="clock-image" src={clock} alt="clock" />
@@ -270,6 +314,7 @@ export default function Board(props) {
 								style={{
 									display: "grid",
 									gridTemplateColumns: getCols(),
+									columnGap: "0px",
 								}}
 							>
 								{row.map((item, colInd) => {

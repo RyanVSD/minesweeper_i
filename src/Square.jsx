@@ -97,7 +97,6 @@ const Square = forwardRef(function Square(props, ref) {
 				) : (
 					<></>
 				)}
-				{value}
 			</button>
 		);
 	}
