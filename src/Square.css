@@ -51,6 +51,26 @@
 	color: rgba(229, 0, 39, 255);
 }
 
+.\34 {
+	color: rgba(134, 18, 168, 255);
+}
+
+.\35 {
+	color: rgba(255, 135, 0, 255);
+}
+
+.\36 {
+	color: rgba(0, 154, 170, 255);
+}
+
+.\37 {
+	color: rgba(66, 66, 66, 255);
+}
+
+.\38 {
+	color: rgba(177, 167, 148, 255);
+}
+
 .square-show:hover,
 .square-hide:hover {
 	background-color: lightgray;
