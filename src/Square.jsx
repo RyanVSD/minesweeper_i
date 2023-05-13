@@ -65,11 +65,21 @@ const Square = forwardRef(function Square(props, ref) {
   } else {
     return (
       <button
-        className={"square-hide-" + getChecker() + " square-hide "}
+        className={
+          "square-hide-" +
+          getChecker() +
+          " square-hide " +
+          (value === -1 ? "mine " : "")
+        }
         onClick={() => {
           if (!isFlagged) {
-            setRevealed(!revealed);
-            props.onClick(props.row + " " + props.col);
+            if (value === -1) {
+              setRevealed(!revealed);
+              props.clickMine();
+            } else {
+              setRevealed(!revealed);
+              props.onClick(props.row + " " + props.col);
+            }
           }
         }}
         onContextMenu={() => {

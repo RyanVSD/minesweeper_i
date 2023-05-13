@@ -14,12 +14,14 @@ export default function Board(props) {
   const [firstClick, setFirstClick] = useState(true);
   const [ids, setIds] = useState([]);
   const [flagCount, setFlagCount] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
   const ref = useRef({});
   const timerRef = useRef(null);
   //Inits empty board
   useEffect(() => {
     setFlagCount(0);
     setFirstClick(true);
+    setGameOver(false);
     timerRef.current?.resetTime();
     timerRef.current?.endTime();
     let ar = [];
@@ -45,6 +47,10 @@ export default function Board(props) {
     }
     setIds(bar);
   }, [props.cols, props.rows, props.mines]);
+
+  function getGameOver() {
+    return gameOver;
+  }
 
   function incFlag(bool) {
     if (bool) {
@@ -129,7 +135,10 @@ export default function Board(props) {
     updateSquares();
   }
 
-  function clickMine() {}
+  function clickMine() {
+    timerRef.current.stopTimer();
+    setGameOver(true);
+  }
 
   async function clearAdjacent(row, col) {
     let tempFlags = 0;
@@ -211,6 +220,7 @@ export default function Board(props) {
                       onClick={(pos) => clickSquare(pos)}
                       onRight={(bool) => incFlag(bool)}
                       clickMine={() => clickMine()}
+                      isGameOver={() => getGameOver()}
                     />
                   );
                 })}
