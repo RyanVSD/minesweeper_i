@@ -1,13 +1,21 @@
+.square-hide-checker-light {
+  background-color: rgba(170, 215, 81, 255);
+}
 
-.square-show-checker-light {
-  background-color: rgba(233,197,159,255);
+.square-hide-checker-dark {
+  background-color: rgba(162, 209, 73, 255);
 }
 
 .square-show-checker-dark {
-  background-color: rgb(100,180,100);
+  background-color: rgba(215, 184, 153, 255);
 }
 
-.square-hide, .square-show {
+.square-show-checker-light {
+  background-color: rgba(229, 194, 159, 255);
+}
+
+.square-hide,
+.square-show {
   font-size: 28px;
   font-weight: bold;
   display: inline;
@@ -18,23 +26,29 @@
   padding: 0px;
   user-select: none;
   box-shadow: 0px;
-  border: 1px solid black;
+  border-width: 0px;
+}
+
+.square-flag {
+  height: 35px;
+  width: 35px;
 }
 
 .mine {
   background-color: red;
+  border-width: 0px;
 }
 
 .\31 {
-  color: rgba(45,82,209,255);
+  color: rgba(45, 82, 209, 255);
 }
 
 .\32 {
-  color: rgba(0,161,65,255);
+  color: rgba(0, 161, 65, 255);
 }
 
 .\33 {
-  color: rgba(229,0,39,255);
+  color: rgba(229, 0, 39, 255);
 }
 
 .square-show:hover,

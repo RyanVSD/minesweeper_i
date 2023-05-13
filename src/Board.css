@@ -1,12 +1,27 @@
 .board {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
 }
 
-.main-board {
-    padding: 10px;
-    background-color: rgb(7, 75, 11);
+.top-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.flag-logo {
+  width: 30px;
+}
+
+.flag-count {
+  color: white;
+}
+
+.game {
+  padding: 10px;
+  background-color: rgb(7, 75, 11);
 }
