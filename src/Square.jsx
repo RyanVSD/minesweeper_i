@@ -71,11 +71,13 @@ const Square = forwardRef(function Square(props, ref) {
 		return (
 			<button
 				className={
-					"square-hide-" + getChecker() + " square-hide "
-					//(value === -1 ? "mine " : "")
+					"square-hide-" +
+					getChecker() +
+					" square-hide " +
+					(value === -1 && props.isWinner() ? "mine " : "")
 				}
 				onClick={() => {
-					if (!isFlagged) {
+					if (!isFlagged && !props.isGameOver()) {
 						if (value === -1) {
 							setRevealed(!revealed);
 							props.clickMine();

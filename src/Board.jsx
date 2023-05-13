@@ -15,6 +15,7 @@ export default function Board(props) {
 	const [ids, setIds] = useState([]);
 	const [flagCount, setFlagCount] = useState(0);
 	const [gameOver, setGameOver] = useState(false);
+	const [winner, setWinner] = useState(false);
 	const ref = useRef({});
 	const timerRef = useRef(null);
 	//Inits empty board
@@ -22,6 +23,7 @@ export default function Board(props) {
 		setFlagCount(0);
 		setFirstClick(true);
 		setGameOver(false);
+		setWinner(false);
 		timerRef.current?.resetTime();
 		timerRef.current?.endTime();
 		let ar = [];
@@ -125,28 +127,39 @@ export default function Board(props) {
 			generateMines(row, col);
 		}
 		setFirstClick(false);
+		let fromZero = 0;
 		if (board[row][col] === 0) {
-			console.log(clearAdjacent(parseInt(row), parseInt(col)).valueOf());
-			await clearAdjacent(parseInt(row), parseInt(col)).valueOf();
-			await updateSides();
-			updateFlags();
+			fromZero += (
+				await clearAdjacent(parseInt(row), parseInt(col))
+			).valueOf();
+			console.log(fromZero);
+			fromZero += (await updateSides()).valueOf();
+			console.log(fromZero);
+			await updateFlags();
 		}
-		updateSquares();
+		await updateSquares();
+		if (checkWinner(1 + fromZero)) {
+			setWinner(true);
+			setGameOver(true);
+			timerRef.current.endTime();
+			console.log("you win!");
+		}
 	}
 
 	async function updateSides() {
-		let repeat = false;
+		let ticked = 0;
 		for (let i = 0; i < props.rows; i++) {
 			for (let j = 0; j < props.cols; j++) {
 				if (isAdjacentTo(i, j, 0) && !getRef(i, j).getStatus()) {
 					getRef(i, j).reveal();
+					ticked++;
 					if (board[i][j] === 0) {
 						clickSquare(i + " " + j, false);
 					}
 				}
 			}
 		}
-		return repeat;
+		return ticked;
 	}
 
 	async function updateFlags() {
@@ -177,12 +190,32 @@ export default function Board(props) {
 		return false;
 	}
 
+	function getWinner() {
+		return winner;
+	}
+
+	function checkWinner() {
+		let tempCheck = 0;
+		for (let i = 0; i < props.rows; i++) {
+			for (let j = 0; j < props.cols; j++) {
+				if (getRef(i, j).getStatus() && board[i][j] !== -1) {
+					tempCheck++;
+				}
+			}
+		}
+		if (props.rows * props.cols - tempCheck <= props.mines) {
+			return true;
+		}
+		return false;
+	}
+
 	function clickMine() {
 		timerRef.current.endTime();
 		setGameOver(true);
 	}
 
 	async function clearAdjacent(row, col) {
+		let ticked = 0;
 		for (let i = -1; i < 2; i += 2) {
 			if (col + i >= 0 && col + i < props.cols) {
 				if (
@@ -190,7 +223,8 @@ export default function Board(props) {
 					!getRef(row, col + i).getStatus()
 				) {
 					await getRef(row, col + i).reveal();
-					await clearAdjacent(row, col + i);
+					ticked++;
+					ticked += (await clearAdjacent(row, col + i)).valueOf();
 				}
 			}
 
@@ -200,10 +234,12 @@ export default function Board(props) {
 					!getRef(row + i, col).getStatus()
 				) {
 					await getRef(row + i, col).reveal();
-					await clearAdjacent(row + i, col).valueOf();
+					ticked++;
+					ticked += (await clearAdjacent(row + i, col)).valueOf();
 				}
 			}
 		}
+		return ticked;
 	}
 
 	function inBounds(row, col) {
@@ -261,6 +297,7 @@ export default function Board(props) {
 											onRight={(bool) => incFlag(bool)}
 											clickMine={() => clickMine()}
 											isGameOver={() => getGameOver()}
+											isWinner={() => getWinner()}
 										/>
 									);
 								})}
