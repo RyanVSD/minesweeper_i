@@ -45,9 +45,20 @@ const Square = forwardRef(function Square(props, ref) {
 				getFlagStatus() {
 					return isFlagged;
 				},
+				click() {
+					if (!isFlagged && !props.isGameOver()) {
+						if (value === -1) {
+							setRevealed(!revealed);
+							props.clickMine();
+						} else {
+							setRevealed(!revealed);
+							props.onClick(props.row + " " + props.col);
+						}
+					}
+				},
 			};
 		},
-		[revealed, isFlagged, props]
+		[revealed, isFlagged, props, value]
 	);
 	if (revealed) {
 		return (
@@ -58,6 +69,12 @@ const Square = forwardRef(function Square(props, ref) {
 					" " +
 					(value === -1 ? "mine " : value + " square-show ")
 				}
+				onClick={() => {
+					if (value !== 0) {
+						console.log("clicking around");
+						props.clickAround(props.row, props.col);
+					}
+				}}
 			>
 				{isFlagged ? (
 					<img className="square-flag" src={flag} alt="F" />

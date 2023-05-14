@@ -280,6 +280,18 @@ export default function Board(props) {
 		return row >= 0 && col >= 0 && col < props.cols && row < props.rows;
 	}
 
+	function clickAround(row, col) {
+		for (let i = -1; i < 2; i++) {
+			for (let j = -1; j < 2; j++) {
+				if (inBounds(row + i, col + j)) {
+					if (!getRef(row + i, col + j).getStatus()) {
+						getRef(row + i, col + j).click();
+					}
+				}
+			}
+		}
+	}
+
 	return (
 		<div
 			className="board"
@@ -343,6 +355,9 @@ export default function Board(props) {
 											clickMine={() => clickMine()}
 											isGameOver={() => getGameOver()}
 											isWinner={() => getWinner()}
+											clickAround={(row, col) => {
+												clickAround(row, col);
+											}}
 										/>
 									);
 								})}
