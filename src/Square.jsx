@@ -71,7 +71,6 @@ const Square = forwardRef(function Square(props, ref) {
 				}
 				onClick={() => {
 					if (value !== 0) {
-						console.log("clicking around");
 						props.clickAround(props.row, props.col);
 					}
 				}}

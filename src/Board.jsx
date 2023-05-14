@@ -166,9 +166,7 @@ export default function Board(props) {
 			fromZero += (
 				await clearAdjacent(parseInt(row), parseInt(col))
 			).valueOf();
-			console.log(fromZero);
 			fromZero += (await updateSides()).valueOf();
-			console.log(fromZero);
 			await updateFlags();
 		}
 		await updateSquares();
@@ -176,7 +174,6 @@ export default function Board(props) {
 			setWinner(true);
 			setGameOver(true);
 			timerRef.current.endTime();
-			console.log("you win!");
 		}
 	}
 
