@@ -329,10 +329,11 @@ export default function Board(props) {
             trigger={
               <button onClick={() => setSizeMenu(!sizeMenu)}>
                 {" "}
-                Change size{" "}
+                Change settings{" "}
               </button>
             }
             menu={[
+              <div> Size </div>,
               <button onClick={() => setSize("small")}>Small</button>,
               <button onClick={() => setSize("medium")}>Medium</button>,
               <button onClick={() => setSize("large")}>Large</button>,
