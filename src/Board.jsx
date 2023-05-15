@@ -311,9 +311,6 @@ export default function Board(props) {
         e.preventDefault();
       }}
     >
-      <button className="new-game-button" onClick={() => resetAll()}>
-        New Game
-      </button>
       <div className="game">
         <div className="top-bar">
           {gameOver ? (
@@ -341,6 +338,9 @@ export default function Board(props) {
               <button onClick={() => setSize("large")}>Large</button>,
             ]}
           />
+          <button className="new-game-button" onClick={() => resetAll()}>
+            New Game
+          </button>
         </div>
         <div
           className="main-board"

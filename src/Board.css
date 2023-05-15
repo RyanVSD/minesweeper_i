@@ -1,53 +1,56 @@
 .board {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
 }
 
 .game {
-	width: fit-content;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .new-game-button {
-	margin: 20px;
+  margin: 20px;
 }
 
 .game-over-text {
-	margin-right: 10px;
-	font-size: 25px;
-	color: white;
+  margin-right: 10px;
+  font-size: 25px;
+  color: white;
 }
 
+.time {
+  margin-right: 10px;
+}
 .clock-image {
-	margin-left: 20px;
-	width: 50px;
-	height: 50px;
+  margin-left: 20px;
+  width: 50px;
+  height: 50px;
 }
 
 .top-bar {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
 }
 
 .flag-logo {
-	height: 50px;
-	width: 50px;
+  height: 50px;
+  width: 50px;
 }
 
 .flag-count {
-	font-size: 25px;
-	color: white;
+  font-size: 25px;
+  color: white;
 }
 
 .game {
-	padding: 10px;
-	background-color: rgba(74, 117, 44, 255);
+  padding: 10px;
+  background-color: rgba(74, 117, 44, 255);
 }
