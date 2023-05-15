@@ -336,8 +336,7 @@ export default function Board(props) {
                 className="menu-button"
                 onClick={() => setSizeMenu(!sizeMenu)}
               >
-                {" "}
-                Change settings{" "}
+                Change settings
               </button>
             }
             menu={[
@@ -361,6 +360,14 @@ export default function Board(props) {
             }}
           >
             Open Change Logs
+          </button>
+          <button
+            className="menu-button"
+            onClick={() => {
+              props.fullscreen();
+            }}
+          >
+            Fullscreen
           </button>
         </div>
         <div className="top-bar">

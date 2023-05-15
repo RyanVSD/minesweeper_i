@@ -5,8 +5,9 @@ import Dialog from "@mui/material/Dialog";
 import { useState } from "react";
 function App() {
   const [open, setOpen] = useState(false);
+  const [fullScreen, setFullScreen] = useState(false);
   return (
-    <div>
+    <div className="App">
       <Dialog
         fullscreen
         open={open}
@@ -35,10 +36,32 @@ function App() {
             text="All buttons have been moved into the board to make for a cleaner interface!"
           />
         </div>
+        <div className="card-holder">
+          <Card
+            title="Fullscreen Update"
+            subtitle="Version 1.2.1"
+            text="Fullscreen option added"
+          />
+        </div>
       </Dialog>
-      <div className="App">
-        <Board openChangelogs={() => setOpen(!open)} />
-      </div>
+      <Dialog
+        fullscreen
+        maxWidth={"none"}
+        maxHeight={"none"}
+        open={fullScreen}
+        onClose={() => {
+          setFullScreen(!fullScreen);
+        }}
+      >
+        <Board
+          openChangelogs={() => setOpen(!open)}
+          fullscreen={() => setFullScreen(!fullScreen)}
+        />
+      </Dialog>
+      <Board
+        openChangelogs={() => setOpen(!open)}
+        fullscreen={() => setFullScreen(!fullScreen)}
+      />
     </div>
   );
 }

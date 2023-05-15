@@ -13,6 +13,10 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+  max-width: none;
+  max-height: none;
+}
 
 .card-holder {
   display: flex;
