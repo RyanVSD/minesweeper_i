@@ -337,6 +337,7 @@ export default function Board(props) {
               <button onClick={() => setSize("small")}>Small</button>,
               <button onClick={() => setSize("medium")}>Medium</button>,
               <button onClick={() => setSize("large")}>Large</button>,
+              <div> Difficulties </div>,
             ]}
           />
           <button className="new-game-button" onClick={() => resetAll()}>
