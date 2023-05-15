@@ -266,6 +266,20 @@ export default function Board(props) {
     setSizeMenu(!sizeMenu);
   }
 
+  function setDifficulty(diff) {
+    if (diff === "easy") {
+      setMinePercent(0.125);
+      setMines(Math.floor(rows * cols * 0.125));
+    } else if (diff === "medium") {
+      setMinePercent(0.175);
+      setMines(Math.floor(rows * cols * 0.175));
+    } else if (diff === "hard") {
+      setMinePercent(0.25);
+      setMines(Math.floor(rows * cols * 0.25));
+    }
+    setSizeMenu(!sizeMenu);
+  }
+
   async function clearAdjacent(row, col) {
     let ticked = 0;
     for (let i = -1; i < 2; i += 2) {
@@ -312,6 +326,43 @@ export default function Board(props) {
       }}
     >
       <div className="game">
+        <div className="game-title">Minesweeper</div>
+        <div className="author">By Ryan Virtue</div>
+        <div className="top-bar">
+          <Dropdown
+            open={sizeMenu}
+            trigger={
+              <button
+                className="menu-button"
+                onClick={() => setSizeMenu(!sizeMenu)}
+              >
+                {" "}
+                Change settings{" "}
+              </button>
+            }
+            menu={[
+              <div> Size </div>,
+              <button onClick={() => setSize("small")}>Small</button>,
+              <button onClick={() => setSize("medium")}>Medium</button>,
+              <button onClick={() => setSize("large")}>Large</button>,
+              <div> Difficulties </div>,
+              <button onClick={() => setDifficulty("easy")}>Easy</button>,
+              <button onClick={() => setDifficulty("medium")}>Medium</button>,
+              <button onClick={() => setDifficulty("hard")}>Hard</button>,
+            ]}
+          />
+          <button className="menu-button" onClick={() => resetAll()}>
+            New Game
+          </button>
+          <button
+            className="menu-button"
+            onClick={() => {
+              props.openChangelogs();
+            }}
+          >
+            Open Change Logs
+          </button>
+        </div>
         <div className="top-bar">
           {gameOver ? (
             <div className="game-over-text">
@@ -324,25 +375,6 @@ export default function Board(props) {
           <div className="flag-count">{mines - flagCount}</div>
           <img className="clock-image" src={clock} alt="clock" />
           <Timer ref={(e) => (timerRef.current = e)} />
-          <Dropdown
-            open={sizeMenu}
-            trigger={
-              <button onClick={() => setSizeMenu(!sizeMenu)}>
-                {" "}
-                Change settings{" "}
-              </button>
-            }
-            menu={[
-              <div> Size </div>,
-              <button onClick={() => setSize("small")}>Small</button>,
-              <button onClick={() => setSize("medium")}>Medium</button>,
-              <button onClick={() => setSize("large")}>Large</button>,
-              <div> Difficulties </div>,
-            ]}
-          />
-          <button className="new-game-button" onClick={() => resetAll()}>
-            New Game
-          </button>
         </div>
         <div
           className="main-board"

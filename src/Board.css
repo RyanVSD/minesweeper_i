@@ -6,6 +6,11 @@
   padding: 10px;
 }
 
+.game-title {
+  color: white;
+  font-size: 30px;
+}
+
 .game {
   width: fit-content;
   display: flex;
@@ -14,8 +19,8 @@
   flex-direction: column;
 }
 
-.new-game-button {
-  margin: 20px;
+.author {
+  color: white;
 }
 
 .game-over-text {
@@ -25,12 +30,23 @@
 }
 
 .time {
-  margin-right: 10px;
+  margin-right: 20px;
 }
 .clock-image {
   margin-left: 20px;
   width: 50px;
   height: 50px;
+}
+
+.menu-button {
+  margin: 2px;
+  border: 1px solid black;
+  border-radius: 0px;
+  padding: 2px;
+}
+.menu-button:hover {
+  cursor: pointer;
+  background-color: rgb(205, 205, 205);
 }
 
 .top-bar {

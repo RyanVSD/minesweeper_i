@@ -1,25 +1,26 @@
 .card {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: flex-start;
-	padding: 20px;
-	border: 2px solid black;
-	border-radius: 20px;
-	width: 300px;
-	margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 15px;
+  border: 2px solid black;
+  border-radius: 20px;
+  width: 300px;
+  margin: 20px;
+  font-family: Arial;
 }
 
 .subtitle {
-	font-size: 20px;
-	margin: 5px;
+  font-size: 20px;
+  margin: 5px;
 }
 
 .title {
-	font-size: 25px;
-	font-weight: 500;
+  font-size: 25px;
+  font-weight: 500;
 }
 
 .card-text {
-	font-size: 14px;
+  font-size: 14px;
 }
