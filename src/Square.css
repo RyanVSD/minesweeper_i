@@ -14,13 +14,38 @@
 	background-color: rgba(229, 194, 159, 255);
 }
 
-.square-hide,
-.square-show {
-	font-size: 28px;
-	font-weight: bold;
-	display: inline;
+.square-hide-checker-light-neg {
+	background-color: rgba(85, 40, 175, 255);
+}
+
+.square-hide-checker-dark-neg {
+	background-color: rgba(92, 46, 182, 255);
+}
+
+.square-show-checker-dark-neg {
+	background-color: rgba(15, 71, 102, 255);
+}
+
+.square-show-checker-light-neg {
+	background-color: rgba(26, 61, 96, 255);
+}
+
+.hide {
+	opacity: 0;
+	height: 0;
+}
+
+.show {
+	opacity: 1;
 	height: 35px;
 	width: 35px;
+}
+
+.square-hide,
+.square-show {
+	font-size: 10px;
+	font-weight: bold;
+	display: inline;
 	line-height: 35px;
 	margin: 0px;
 	padding: 0px;

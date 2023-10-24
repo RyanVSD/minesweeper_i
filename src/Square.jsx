@@ -2,6 +2,7 @@ import React from "react";
 import { useState, forwardRef, useImperativeHandle } from "react";
 import "./Square.css";
 import flag from "./images/flag.jpg";
+import imflag from "./images/imaginaryFlag.png";
 
 const Square = forwardRef(function Square(props, ref) {
 	const [value, setValue] = useState(props.value);
@@ -66,8 +67,10 @@ const Square = forwardRef(function Square(props, ref) {
 				className={
 					"square-show-" +
 					getChecker() +
+					(props.imaginary ? "-neg" : "") +
 					" " +
-					(value === -1 ? "mine " : value + " square-show ")
+					(value === -1 ? "mine " : value + " square-show ") +
+					(props.hidden ? "hide " : "show ")
 				}
 				onClick={() => {
 					if (value !== 0) {
@@ -76,7 +79,11 @@ const Square = forwardRef(function Square(props, ref) {
 				}}
 			>
 				{isFlagged ? (
-					<img className="square-flag" src={flag} alt="F" />
+					<img
+						className="square-flag"
+						src={props.imaginary ? imflag : flag}
+						alt="F"
+					/>
 				) : (
 					<></>
 				)}
@@ -89,8 +96,10 @@ const Square = forwardRef(function Square(props, ref) {
 				className={
 					"square-hide-" +
 					getChecker() +
+					(props.imaginary ? "-neg" : "") +
 					" square-hide " +
-					(value === -1 && props.isWinner() ? "mine " : "")
+					(value === -1 && props.isWinner() ? "mine " : "") +
+					(props.hidden ? "hide " : "show ")
 				}
 				onClick={() => {
 					if (!isFlagged && !props.isGameOver()) {
@@ -109,7 +118,11 @@ const Square = forwardRef(function Square(props, ref) {
 				}}
 			>
 				{isFlagged ? (
-					<img className="square-flag" src={flag} alt="F" />
+					<img
+						className="square-flag"
+						src={props.imaginary ? imflag : flag}
+						alt="F"
+					/>
 				) : (
 					<></>
 				)}
