@@ -277,7 +277,7 @@ export default function Board(props) {
 				tempBoard[newRow][newCol] !== -1 &&
 				(newRow !== row || newCol !== col) &&
 				Math.abs(newRow - row) + Math.abs(newCol - col) >
-					(imaginaryView ? 0 : 2)
+					(imaginaryView ? 0 : 3)
 			) {
 				for (var j = -1; j < 2; j++) {
 					for (var k = -1; k < 2; k++) {
@@ -306,7 +306,7 @@ export default function Board(props) {
 				tempImBoard[newRow][newCol] !== -1 &&
 				(newRow !== row || newCol !== col) &&
 				Math.abs(newRow - row) + Math.abs(newCol - col) >
-					(imaginaryView ? 2 : 0)
+					(imaginaryView ? 3 : 0)
 			) {
 				for (j = -1; j < 2; j++) {
 					for (k = -1; k < 2; k++) {
@@ -523,17 +523,17 @@ export default function Board(props) {
 
 	function setDifficulty(diff) {
 		if (diff === "easy") {
-			setMinePercent(0.175);
-			setMines(Math.floor(rows * cols * 0.175));
-			setImMines(Math.floor(rows * cols * 0.175));
-		} else if (diff === "medium") {
 			setMinePercent(0.25);
 			setMines(Math.floor(rows * cols * 0.25));
 			setImMines(Math.floor(rows * cols * 0.25));
+		} else if (diff === "medium") {
+			setMinePercent(0.4);
+			setMines(Math.floor(rows * cols * 0.4));
+			setImMines(Math.floor(rows * cols * 0.4));
 		} else if (diff === "hard") {
-			setMinePercent(0.35);
-			setMines(Math.floor(rows * cols * 0.35));
-			setImMines(Math.floor(rows * cols * 0.35));
+			setMinePercent(0.5);
+			setMines(Math.floor(rows * cols * 0.5));
+			setImMines(Math.floor(rows * cols * 0.5));
 		}
 		setSizeMenu(!sizeMenu);
 	}
