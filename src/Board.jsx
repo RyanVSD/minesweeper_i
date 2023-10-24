@@ -21,13 +21,13 @@ export default function Board(props) {
 	//imaginary stuff
 	const [imids, setImids] = useState([]);
 	const [imFlagCount, setImFlagCount] = useState(0);
-	const [imMines, setImMines] = useState(44);
+	const [imMines, setImMines] = useState(63);
 	const imref = useRef({});
 	//regular stuff
 	const [ids, setIds] = useState([]);
 	const [flagCount, setFlagCount] = useState(0);
-	const [mines, setMines] = useState(44);
-	const [minePercent, setMinePercent] = useState(0.175);
+	const [mines, setMines] = useState(63);
+	const [minePercent, setMinePercent] = useState(0.25);
 	const ref = useRef({});
 	//game state stuff
 	const [gameOver, setGameOver] = useState(false);
