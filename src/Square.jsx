@@ -5,11 +5,22 @@ import flag from "./images/flag.jpg";
 import imflag from "./images/imaginaryFlag.png";
 import bomb from "./images/labombareal.png";
 import imbomb from "./images/labombaimaginary.png";
+import { useEffect } from "react";
 
 const Square = forwardRef(function Square(props, ref) {
 	const [value, setValue] = useState(props.value);
 	const [revealed, setRevealed] = useState(props.revealed);
 	const [isFlagged, setIsFlagged] = useState(false);
+	const [imValue, setImValue] = useState();
+	const [nValue, setNValue] = useState();
+
+	useEffect(() => {
+		let arr = String(value).split(" + ");
+		setImValue(
+			String(arr[1]).split("i")[0] > 0 ? String(arr[1]).split("i")[0] : ""
+		);
+		setNValue(arr[0] > 0 ? arr[0] : "");
+	}, [value]);
 
 	function getChecker() {
 		if (props.row % 2 === 0) {
@@ -71,7 +82,6 @@ const Square = forwardRef(function Square(props, ref) {
 					getChecker() +
 					(props.imaginary ? "-neg" : "") +
 					" " +
-					value +
 					" square-show " +
 					(props.hidden ? "hide " : "show ")
 				}
@@ -90,7 +100,17 @@ const Square = forwardRef(function Square(props, ref) {
 				) : (
 					<></>
 				)}
-				{value === -1 || value === 0 ? "" : value}
+				{value === -1 || value === 0 ? (
+					""
+				) : (
+					<div>
+						<span className={nValue}>{nValue}</span>
+						<span>{imValue > 0 && nValue > 0 ? " + " : ""}</span>
+						<span className={imValue}>
+							{imValue > 0 ? imValue + "i" : ""}
+						</span>
+					</div>
+				)}
 				{value === -1 ? (
 					<img
 						src={props.imaginary ? imbomb : bomb}
