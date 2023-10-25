@@ -32,6 +32,7 @@ export default function Board(props) {
 	//game state stuff
 	const [gameOver, setGameOver] = useState(false);
 	const [winner, setWinner] = useState(false);
+	const [loser, setLoser] = useState(false);
 	const [sizeMenu, setSizeMenu] = useState(false);
 	const timerRef = useRef(null);
 	const [imaginaryView, setImaginaryView] = useState(false);
@@ -43,6 +44,7 @@ export default function Board(props) {
 			setFirstClick(true);
 			setGameOver(false);
 			setWinner(false);
+			setLoser(false);
 			setImaginaryView(false);
 
 			let ar = [];
@@ -94,11 +96,16 @@ export default function Board(props) {
 		timerRef.current?.endTime();
 	}, [cols, rows, mines]);
 
+	useEffect(() => {
+		timerRef.current?.endTime();
+	}, [ids, imids]);
+
 	const resetAll = () => {
 		setFlagCount(0);
 		setImFlagCount(0);
 		setFirstClick(true);
 		setGameOver(false);
+		setLoser(false);
 		setWinner(false);
 		setImaginaryView(false);
 
@@ -352,8 +359,7 @@ export default function Board(props) {
 		}
 		await updateSquares();
 		if (checkWinner(1 + fromZero)) {
-			setWinner(true);
-			setGameOver(true);
+			setWinner(gameOver ? false : true);
 			timerRef.current.endTime();
 		}
 	}
@@ -497,6 +503,8 @@ export default function Board(props) {
 	}
 
 	function clickMine() {
+		setGameOver(true);
+		setLoser(true);
 		timerRef.current.endTime();
 		for (let i = 0; i < rows; i++) {
 			for (let j = 0; j < cols; j++) {
@@ -504,7 +512,6 @@ export default function Board(props) {
 				getImRef(i, j).reveal();
 			}
 		}
-		setGameOver(true);
 	}
 
 	function setSize(size) {
@@ -685,7 +692,7 @@ export default function Board(props) {
 				<div className="top-bar">
 					{gameOver ? (
 						<div className="game-over-text">
-							{winner ? "You win!" : "You lose"}
+							{!loser ? "You win!" : "You lose"}
 						</div>
 					) : (
 						<></>

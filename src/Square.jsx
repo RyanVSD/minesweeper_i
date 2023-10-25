@@ -142,7 +142,6 @@ const Square = forwardRef(function Square(props, ref) {
 					getChecker() +
 					(props.imaginary ? "-neg" : "") +
 					" square-hide " +
-					(value === -1 && props.isWinner() ? "mine " : "") +
 					(props.hidden ? "hide " : "show ")
 				}
 				onClick={() => {

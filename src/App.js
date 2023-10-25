@@ -17,6 +17,17 @@ function App() {
 			>
 				<div className="card-holder">
 					<Card
+						title="Mini update"
+						subtitle="Version 1.1"
+						text="Updated text now has different color display for both imaginary and real number text. 
+            Fixed win when losing bug. 
+            Upgraded graphics. 
+            Added bomb sprite.
+            Timer glitch fixed."
+					/>
+				</div>
+				<div className="card-holder">
+					<Card
 						title="Release"
 						subtitle="Version 1.0"
 						text="Imaginary minesweeper release. Each square is adjacent to ones it normally would be in its dimension, as well as those around it in the other dimension. This includes the same square in the other dimension as well.
