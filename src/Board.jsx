@@ -693,14 +693,6 @@ export default function Board(props) {
 					>
 						Open Change Logs
 					</button>
-					<button
-						onClick={() => {
-							console.log(winner);
-							console.log(loser);
-						}}
-					>
-						Print
-					</button>
 				</div>
 				<div className="top-bar">
 					{gameOver ? (
