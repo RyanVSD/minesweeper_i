@@ -14,19 +14,19 @@ export default function Board(props) {
 	//Holds board data
 	const [board, setBoard] = useState([]);
 	const [imaginaryBoard, setImaginaryBoard] = useState([]);
-	const [rows, setRows] = useState(14);
-	const [cols, setCols] = useState(18);
+	const [rows, setRows] = useState(10);
+	const [cols, setCols] = useState(14);
 	//first click
 	const [firstClick, setFirstClick] = useState(true);
 	//imaginary stuff
 	const [imids, setImids] = useState([]);
 	const [imFlagCount, setImFlagCount] = useState(0);
-	const [imMines, setImMines] = useState(63);
+	const [imMines, setImMines] = useState(35);
 	const imref = useRef({});
 	//regular stuff
 	const [ids, setIds] = useState([]);
 	const [flagCount, setFlagCount] = useState(0);
-	const [mines, setMines] = useState(63);
+	const [mines, setMines] = useState(35);
 	const [minePercent, setMinePercent] = useState(0.25);
 	const ref = useRef({});
 	//game state stuff
@@ -509,37 +509,37 @@ export default function Board(props) {
 
 	function setSize(size) {
 		if (size === "small") {
-			setRows(8);
-			setCols(10);
-			setMines(Math.floor(minePercent * 8 * 10));
-			setImMines(Math.floor(minePercent * 8 * 10));
+			setRows(6);
+			setCols(8);
+			setMines(Math.floor(minePercent * 6 * 8));
+			setImMines(Math.floor(minePercent * 6 * 8));
 		} else if (size === "medium") {
+			setRows(10);
+			setCols(14);
+			setMines(Math.floor(minePercent * 10 * 14));
+			setImMines(Math.floor(minePercent * 10 * 14));
+		} else if (size === "large") {
 			setRows(14);
 			setCols(18);
 			setMines(Math.floor(minePercent * 14 * 18));
 			setImMines(Math.floor(minePercent * 14 * 18));
-		} else if (size === "large") {
-			setRows(20);
-			setCols(24);
-			setMines(Math.floor(minePercent * 20 * 24));
-			setImMines(Math.floor(minePercent * 20 * 24));
 		}
 		setSizeMenu(!sizeMenu);
 	}
 
 	function setDifficulty(diff) {
 		if (diff === "easy") {
+			setMinePercent(0.175);
+			setMines(Math.floor(rows * cols * 0.175));
+			setImMines(Math.floor(rows * cols * 0.175));
+		} else if (diff === "medium") {
 			setMinePercent(0.25);
 			setMines(Math.floor(rows * cols * 0.25));
 			setImMines(Math.floor(rows * cols * 0.25));
-		} else if (diff === "medium") {
-			setMinePercent(0.4);
-			setMines(Math.floor(rows * cols * 0.4));
-			setImMines(Math.floor(rows * cols * 0.4));
 		} else if (diff === "hard") {
-			setMinePercent(0.5);
-			setMines(Math.floor(rows * cols * 0.5));
-			setImMines(Math.floor(rows * cols * 0.5));
+			setMinePercent(0.35);
+			setMines(Math.floor(rows * cols * 0.35));
+			setImMines(Math.floor(rows * cols * 0.35));
 		}
 		setSizeMenu(!sizeMenu);
 	}
