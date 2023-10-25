@@ -498,13 +498,13 @@ export default function Board(props) {
 
 	function clickMine() {
 		timerRef.current.endTime();
-		setGameOver(true);
 		for (let i = 0; i < rows; i++) {
 			for (let j = 0; j < cols; j++) {
 				getRef(i, j).reveal();
 				getImRef(i, j).reveal();
 			}
 		}
+		setGameOver(true);
 	}
 
 	function setSize(size) {
