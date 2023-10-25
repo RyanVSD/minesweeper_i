@@ -17,6 +17,17 @@
 	height: 0px;
 }
 
+.imagine-swap {
+	height: 50px;
+	transform: rotate(50deg);
+	transition: 0.25s ease-in-out;
+}
+
+.imagine-swap:hover {
+	transform: rotate(230deg);
+	transition: 0.25s ease-in-out;
+}
+
 .game {
 	width: fit-content;
 	display: flex;

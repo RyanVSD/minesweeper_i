@@ -3,6 +3,8 @@ import { useState, forwardRef, useImperativeHandle } from "react";
 import "./Square.css";
 import flag from "./images/flag.jpg";
 import imflag from "./images/imaginaryFlag.png";
+import bomb from "./images/labombareal.png";
+import imbomb from "./images/labombaimaginary.png";
 
 const Square = forwardRef(function Square(props, ref) {
 	const [value, setValue] = useState(props.value);
@@ -69,7 +71,8 @@ const Square = forwardRef(function Square(props, ref) {
 					getChecker() +
 					(props.imaginary ? "-neg" : "") +
 					" " +
-					(value === -1 ? "mine " : value + " square-show ") +
+					value +
+					" square-show " +
 					(props.hidden ? "hide " : "show ")
 				}
 				onClick={() => {
@@ -88,6 +91,15 @@ const Square = forwardRef(function Square(props, ref) {
 					<></>
 				)}
 				{value === -1 || value === 0 ? "" : value}
+				{value === -1 ? (
+					<img
+						src={props.imaginary ? imbomb : bomb}
+						alt="bomb"
+						style={{ height: "30px", margin: "0", width: "30px" }}
+					/>
+				) : (
+					<></>
+				)}
 			</button>
 		);
 	} else {
