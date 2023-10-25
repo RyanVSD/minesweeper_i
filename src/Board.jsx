@@ -100,6 +100,10 @@ export default function Board(props) {
 		timerRef.current?.endTime();
 	}, [ids, imids]);
 
+	useEffect(() => {
+		updateSquares();
+	});
+
 	const resetAll = () => {
 		setFlagCount(0);
 		setImFlagCount(0);
@@ -359,7 +363,8 @@ export default function Board(props) {
 		}
 		await updateSquares();
 		if (checkWinner(1 + fromZero)) {
-			setWinner(gameOver ? false : true);
+			setWinner(true);
+			setGameOver(true);
 			timerRef.current.endTime();
 		}
 	}
@@ -687,6 +692,14 @@ export default function Board(props) {
 						}}
 					>
 						Open Change Logs
+					</button>
+					<button
+						onClick={() => {
+							console.log(winner);
+							console.log(loser);
+						}}
+					>
+						Print
 					</button>
 				</div>
 				<div className="top-bar">
