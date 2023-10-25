@@ -11,15 +11,25 @@ const Square = forwardRef(function Square(props, ref) {
 	const [value, setValue] = useState(props.value);
 	const [revealed, setRevealed] = useState(props.revealed);
 	const [isFlagged, setIsFlagged] = useState(false);
-	const [imValue, setImValue] = useState();
-	const [nValue, setNValue] = useState();
+	const [imValue, setImValue] = useState("");
+	const [nValue, setNValue] = useState("");
 
 	useEffect(() => {
 		let arr = String(value).split(" + ");
-		setImValue(
-			String(arr[1]).split("i")[0] > 0 ? String(arr[1]).split("i")[0] : ""
-		);
-		setNValue(arr[0] > 0 ? arr[0] : "");
+		if (arr.length > 1) {
+			setImValue(
+				String(arr[1]).split("i")[0] > 0
+					? String(arr[1]).split("i")[0]
+					: ""
+			);
+			setNValue(arr[0] > 0 ? arr[0] : "");
+		} else {
+			if (String(arr[0]).includes("i")) {
+				setImValue(String(arr[0]).split("i")[0]);
+			} else {
+				setNValue(arr[0]);
+			}
+		}
 	}, [value]);
 
 	function getChecker() {
@@ -104,7 +114,9 @@ const Square = forwardRef(function Square(props, ref) {
 					""
 				) : (
 					<div>
-						<span className={nValue}>{nValue}</span>
+						<span className={nValue}>
+							{nValue > 0 ? nValue : ""}
+						</span>
 						<span>{imValue > 0 && nValue > 0 ? " + " : ""}</span>
 						<span className={imValue}>
 							{imValue > 0 ? imValue + "i" : ""}
