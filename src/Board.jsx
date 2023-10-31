@@ -785,6 +785,9 @@ export default function Board(props) {
 											clickMine={() => clickMine()}
 											isGameOver={() => getGameOver()}
 											isWinner={() => getWinner()}
+											imView={() => {
+												return imaginaryView;
+											}}
 											clickAround={(row, col) => {
 												clickImAround(row, col);
 											}}
@@ -844,6 +847,9 @@ export default function Board(props) {
 											clickMine={() => clickMine()}
 											isGameOver={() => getGameOver()}
 											isWinner={() => getWinner()}
+											imView={() => {
+												return imaginaryView;
+											}}
 											clickAround={(row, col) => {
 												clickAround(row, col);
 											}}

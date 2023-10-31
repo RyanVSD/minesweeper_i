@@ -84,93 +84,101 @@ const Square = forwardRef(function Square(props, ref) {
 		},
 		[revealed, isFlagged, props, value]
 	);
-	if (revealed) {
-		return (
-			<button
-				className={
-					"square-show-" +
-					getChecker() +
-					(props.imaginary ? "-neg" : "") +
-					" " +
-					" square-show " +
-					(props.hidden ? "hide " : "show ")
-				}
-				onClick={() => {
-					if (value !== 0) {
-						props.clickAround(props.row, props.col);
+	if (props.imView() === props.imaginary) {
+		if (revealed) {
+			return (
+				<button
+					className={
+						"square-show-" +
+						getChecker() +
+						(props.imaginary ? "-neg" : "") +
+						" " +
+						" square-show " +
+						(props.hidden ? "hide " : "show ")
 					}
-				}}
-			>
-				{isFlagged ? (
-					<img
-						className="square-flag"
-						src={props.imaginary ? imflag : flag}
-						alt="F"
-					/>
-				) : (
-					<></>
-				)}
-				{value === -1 || value === 0 ? (
-					""
-				) : (
-					<div>
-						<span className={nValue}>
-							{nValue > 0 ? nValue : ""}
-						</span>
-						<span>{imValue > 0 && nValue > 0 ? " + " : ""}</span>
-						<span className={imValue}>
-							{imValue > 0 ? imValue + "i" : ""}
-						</span>
-					</div>
-				)}
-				{value === -1 ? (
-					<img
-						src={props.imaginary ? imbomb : bomb}
-						alt="bomb"
-						style={{ height: "30px", margin: "0", width: "30px" }}
-					/>
-				) : (
-					<></>
-				)}
-			</button>
-		);
-	} else {
-		return (
-			<button
-				className={
-					"square-hide-" +
-					getChecker() +
-					(props.imaginary ? "-neg" : "") +
-					" square-hide " +
-					(props.hidden ? "hide " : "show ")
-				}
-				onClick={() => {
-					if (!isFlagged && !props.isGameOver()) {
-						if (value === -1) {
-							setRevealed(!revealed);
-							props.clickMine();
-						} else {
-							setRevealed(!revealed);
-							props.onClick(props.row + " " + props.col);
+					onClick={() => {
+						if (value !== 0) {
+							props.clickAround(props.row, props.col);
 						}
+					}}
+				>
+					{isFlagged ? (
+						<img
+							className="square-flag"
+							src={props.imaginary ? imflag : flag}
+							alt="F"
+						/>
+					) : (
+						<></>
+					)}
+					{value === -1 || value === 0 ? (
+						""
+					) : (
+						<div>
+							<span className={nValue}>
+								{nValue > 0 ? nValue : ""}
+							</span>
+							<span>
+								{imValue > 0 && nValue > 0 ? " + " : ""}
+							</span>
+							<span className={imValue}>
+								{imValue > 0 ? imValue + "i" : ""}
+							</span>
+						</div>
+					)}
+					{value === -1 ? (
+						<img
+							src={props.imaginary ? imbomb : bomb}
+							alt="bomb"
+							style={{
+								height: "30px",
+								margin: "0",
+								width: "30px",
+							}}
+						/>
+					) : (
+						<></>
+					)}
+				</button>
+			);
+		} else {
+			return (
+				<button
+					className={
+						"square-hide-" +
+						getChecker() +
+						(props.imaginary ? "-neg" : "") +
+						" square-hide " +
+						(props.hidden ? "hide " : "show ")
 					}
-				}}
-				onContextMenu={() => {
-					setIsFlagged(!isFlagged);
-					props.onRight(!isFlagged);
-				}}
-			>
-				{isFlagged ? (
-					<img
-						className="square-flag"
-						src={props.imaginary ? imflag : flag}
-						alt="F"
-					/>
-				) : (
-					<></>
-				)}
-			</button>
-		);
+					onClick={() => {
+						if (!isFlagged && !props.isGameOver()) {
+							if (value === -1) {
+								setRevealed(!revealed);
+								props.clickMine();
+							} else {
+								setRevealed(!revealed);
+								props.onClick(props.row + " " + props.col);
+							}
+						}
+					}}
+					onContextMenu={() => {
+						setIsFlagged(!isFlagged);
+						props.onRight(!isFlagged);
+					}}
+				>
+					{isFlagged ? (
+						<img
+							className="square-flag"
+							src={props.imaginary ? imflag : flag}
+							alt="F"
+						/>
+					) : (
+						<></>
+					)}
+				</button>
+			);
+		}
 	}
 });
 
