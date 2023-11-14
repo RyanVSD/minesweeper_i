@@ -8,8 +8,8 @@ const Timer = forwardRef(function Timer(props, ref) {
 
 	useEffect(() => {
 		async function wait() {
-			await timeout(1000);
-			setTime(time + 1);
+			await timeout(10);
+			setTime(time + 0.01);
 		}
 		if (timerOn && time < 999) {
 			wait();
@@ -37,7 +37,7 @@ const Timer = forwardRef(function Timer(props, ref) {
 	async function timeout(delay) {
 		return new Promise((res) => setTimeout(res, delay));
 	}
-	return <div className="time">{time}</div>;
+	return <div className="time">{Math.floor(time)}</div>;
 });
 
 export default Timer;

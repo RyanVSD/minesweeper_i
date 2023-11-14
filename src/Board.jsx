@@ -20,6 +20,7 @@ export default function Board(props) {
 	const [firstClick, setFirstClick] = useState(true);
 	//imaginary stuff
 	const [imids, setImids] = useState([]);
+	const [imRevealed, setImRevealed] = useState([]);
 	const [imFlagCount, setImFlagCount] = useState(0);
 	const [imMines, setImMines] = useState(35);
 	const imref = useRef({});
@@ -36,6 +37,29 @@ export default function Board(props) {
 	const [sizeMenu, setSizeMenu] = useState(false);
 	const timerRef = useRef(null);
 	const [imaginaryView, setImaginaryView] = useState(false);
+
+	const arr2D = (r, c, x) => {
+		var arr = [];
+		for (let i = 0; i < r; i++) {
+			arr[i] = [];
+			for (let j = 0; j < c; j++) {
+				arr[i][j] = x;
+			}
+		}
+		return arr;
+	};
+
+	const arr2DID = (r, c) => {
+		var arr = [];
+		for (let i = 0; i < r; i++) {
+			arr[i] = [];
+			for (let j = 0; j < c; j++) {
+				arr[i][j] = uuidv4();
+			}
+		}
+		return arr;
+	};
+
 	//Inits empty board
 	useEffect(() => {
 		const resetAll = () => {
@@ -46,51 +70,10 @@ export default function Board(props) {
 			setWinner(false);
 			setLoser(false);
 			setImaginaryView(false);
-
-			let ar = [];
-			for (var i = 0; i < rows; i++) {
-				let row = [];
-				ar.push(row);
-			}
-			for (i = 0; i < rows; i++) {
-				for (var j = 0; j < cols; j++) {
-					ar[i].push(c.CONSTANTS.Empty);
-				}
-			}
-			setBoard(ar);
-			let fr = [];
-			for (i = 0; i < rows; i++) {
-				let row = [];
-				fr.push(row);
-			}
-			for (i = 0; i < rows; i++) {
-				for (j = 0; j < cols; j++) {
-					fr[i].push(c.CONSTANTS.Empty);
-				}
-			}
-			setImaginaryBoard(fr);
-			let bar = [];
-			for (i = 0; i < rows; i++) {
-				let row = [];
-				bar.push(row);
-			}
-			for (i = 0; i < rows; i++) {
-				for (j = 0; j < cols; j++) {
-					bar[i].push(uuidv4());
-				}
-			}
-			setIds(bar);
-			bar = [];
-			for (i = 0; i < rows; i++) {
-				let row = [];
-				bar.push(row);
-			}
-			for (i = 0; i < rows; i++) {
-				for (j = 0; j < cols; j++) {
-					bar[i].push(uuidv4());
-				}
-			}
-			setImids(bar);
+			setBoard(arr2D(rows, cols, c.CONSTANTS.Empty));
+			setImaginaryBoard(arr2D(rows, cols, c.CONSTANTS.Empty));
+			setIds(arr2DID(rows, cols));
+			setImids(arr2DID(rows, cols));
 		};
 		resetAll();
 		timerRef.current?.endTime();
@@ -109,54 +92,13 @@ export default function Board(props) {
 		setImFlagCount(0);
 		setFirstClick(true);
 		setGameOver(false);
-		setLoser(false);
 		setWinner(false);
+		setLoser(false);
 		setImaginaryView(false);
-
-		let ar = [];
-		for (var i = 0; i < rows; i++) {
-			let row = [];
-			ar.push(row);
-		}
-		for (i = 0; i < rows; i++) {
-			for (var j = 0; j < cols; j++) {
-				ar[i].push(c.CONSTANTS.Empty);
-			}
-		}
-		setBoard(ar);
-		let fr = [];
-		for (i = 0; i < rows; i++) {
-			let row = [];
-			fr.push(row);
-		}
-		for (i = 0; i < rows; i++) {
-			for (j = 0; j < cols; j++) {
-				fr[i].push(c.CONSTANTS.Empty);
-			}
-		}
-		setImaginaryBoard(fr);
-		let bar = [];
-		for (i = 0; i < rows; i++) {
-			let row = [];
-			bar.push(row);
-		}
-		for (i = 0; i < rows; i++) {
-			for (j = 0; j < cols; j++) {
-				bar[i].push(uuidv4());
-			}
-		}
-		setIds(bar);
-		bar = [];
-		for (i = 0; i < rows; i++) {
-			let row = [];
-			bar.push(row);
-		}
-		for (i = 0; i < rows; i++) {
-			for (j = 0; j < cols; j++) {
-				bar[i].push(uuidv4());
-			}
-		}
-		setImids(bar);
+		setBoard(arr2D(rows, cols, c.CONSTANTS.Empty));
+		setImaginaryBoard(arr2D(rows, cols, c.CONSTANTS.Empty));
+		setIds(arr2DID(rows, cols));
+		setImids(arr2DID(rows, cols));
 		timerRef.current?.endTime();
 	};
 
