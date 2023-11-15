@@ -87,6 +87,8 @@ export default function Board(props) {
 		setGameOver(false);
 		setWinner(false);
 		setLoser(false);
+		setFlagCount(mines);
+		setImFlagCount(mines);
 		setImaginaryView(false);
 		setBoard(arr2D(rows, cols, c.CONSTANTS.Empty));
 		setImaginaryBoard(arr2D(rows, cols, c.CONSTANTS.Empty));
