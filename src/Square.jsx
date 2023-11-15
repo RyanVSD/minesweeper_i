@@ -14,16 +14,13 @@ const Square = forwardRef(function Square(props, ref) {
 	const [autoClicked, setAutoClicked] = useState(false);
 
 	useEffect(() => {
-		console.log(props.value, nValue(value), imValue(value));
 		if (props.imaginary) {
 			if (!autoClicked && revealed && imValue(value) === "") {
-				console.log("clicking im");
 				props.clickAround(props.row, props.col);
 				setAutoClicked(true);
 			}
 		} else {
 			if (!autoClicked && revealed && nValue(value) === "") {
-				console.log("clicking norm");
 				props.clickAround(props.row, props.col);
 				setAutoClicked(true);
 			}
@@ -34,11 +31,6 @@ const Square = forwardRef(function Square(props, ref) {
 		if (!val) return "";
 		let arr = String(val).split(" + ");
 		if (arr.length > 1) {
-			console.log(
-				String(arr[1]).split("i")[0] > 0
-					? String(arr[1]).split("i")[0]
-					: ""
-			);
 			return String(arr[1]).split("i")[0] > 0
 				? String(arr[1]).split("i")[0]
 				: "";
@@ -128,11 +120,7 @@ const Square = forwardRef(function Square(props, ref) {
 						(props.hidden ? "hide " : "show ")
 					}
 					onClick={() => {
-						console.log(value);
-
-						if (props.value !== 0) {
-							props.clickAround(props.row, props.col);
-						}
+						props.clickAround(props.row, props.col);
 					}}
 				>
 					{isFlagged ? (
@@ -192,7 +180,7 @@ const Square = forwardRef(function Square(props, ref) {
 					}}
 					onContextMenu={() => {
 						setIsFlagged(!isFlagged);
-						props.onRight(!isFlagged);
+						props.incFlag(isFlagged);
 					}}
 				>
 					{isFlagged ? (

@@ -21,15 +21,14 @@ export default function Board(props) {
 	//imaginary stuff
 	const [imids, setImids] = useState([]);
 	const [imRevealed, setImRevealed] = useState([]);
-	const [imFlagCount, setImFlagCount] = useState(0);
-	const [imMines, setImMines] = useState(35);
 	const imref = useRef({});
+	const [imFlagCount, setImFlagCount] = useState(35);
 	//regular stuff
 	const [ids, setIds] = useState([]);
-	const [flagCount, setFlagCount] = useState(0);
 	const [mines, setMines] = useState(35);
 	const [minePercent, setMinePercent] = useState(0.25);
 	const ref = useRef({});
+	const [flagCount, setFlagCount] = useState(35);
 	//game state stuff
 	const [gameOver, setGameOver] = useState(false);
 	const [winner, setWinner] = useState(false);
@@ -63,9 +62,9 @@ export default function Board(props) {
 	//Inits empty board
 	useEffect(() => {
 		const resetAll = () => {
-			setFlagCount(0);
-			setImFlagCount(0);
 			setFirstClick(true);
+			setFlagCount(mines);
+			setImFlagCount(mines);
 			setGameOver(false);
 			setWinner(false);
 			setLoser(false);
@@ -83,13 +82,7 @@ export default function Board(props) {
 		timerRef.current?.endTime();
 	}, [ids, imids]);
 
-	useEffect(() => {
-		updateSquares();
-	});
-
 	const resetAll = () => {
-		setFlagCount(0);
-		setImFlagCount(0);
 		setFirstClick(true);
 		setGameOver(false);
 		setWinner(false);
@@ -104,22 +97,6 @@ export default function Board(props) {
 
 	function getGameOver() {
 		return gameOver;
-	}
-
-	function incFlag(bool, im) {
-		if (im) {
-			if (bool) {
-				setFlagCount(flagCount + 1);
-			} else {
-				setFlagCount(flagCount - 1);
-			}
-		} else {
-			if (bool) {
-				setImFlagCount(imFlagCount + 1);
-			} else {
-				setImFlagCount(imFlagCount - 1);
-			}
-		}
 	}
 
 	//Returns col number of 1frs
@@ -156,6 +133,23 @@ export default function Board(props) {
 		}
 	}
 
+	function incFlag(f) {
+		console.log("incing flag");
+		if (f) {
+			setFlagCount(flagCount + 1);
+		} else {
+			setFlagCount(flagCount - 1);
+		}
+	}
+
+	function incImFlag(f) {
+		if (f) {
+			setImFlagCount(imFlagCount + 1);
+		} else {
+			setImFlagCount(imFlagCount - 1);
+		}
+	}
+
 	function getSquareText(row, col, imaginary) {
 		let num = board[row][col];
 		let inum = imaginaryBoard[row][col];
@@ -168,7 +162,6 @@ export default function Board(props) {
 				return num;
 			}
 		}
-		//console.log(row, col, imaginary, nmines, imines);
 		if (num > 0 && inum > 0) {
 			return num + " + " + inum + "i";
 		} else if (num === 0 && inum > 0) {
@@ -287,7 +280,6 @@ export default function Board(props) {
 	}
 
 	async function clickSquare(pos, first, im) {
-		//console.log("clicked " + pos);
 		let row = pos.split(" ")[0];
 		let col = pos.split(" ")[1];
 		if (first) {
@@ -299,29 +291,11 @@ export default function Board(props) {
 			clickSquare(pos, first, im);
 		}
 		await updateSquares();
-		updateFlags();
 		if (checkWinner()) {
 			setWinner(true);
 			setGameOver(true);
 			timerRef.current.endTime();
 		}
-	}
-
-	async function updateFlags() {
-		let tempFlag = 0;
-		let tempImFlag = 0;
-		for (let i = 0; i < rows; i++) {
-			for (let j = 0; j < cols; j++) {
-				if (getRef(i, j).getFlagStatus()) {
-					tempFlag++;
-				}
-				if (getImRef(i, j).getFlagStatus()) {
-					tempImFlag++;
-				}
-			}
-		}
-		setImFlagCount(tempImFlag);
-		setFlagCount(tempFlag);
 	}
 
 	function getWinner() {
@@ -367,17 +341,14 @@ export default function Board(props) {
 			setRows(6);
 			setCols(8);
 			setMines(Math.floor(minePercent * 6 * 8));
-			setImMines(Math.floor(minePercent * 6 * 8));
 		} else if (size === "medium") {
 			setRows(10);
 			setCols(14);
 			setMines(Math.floor(minePercent * 10 * 14));
-			setImMines(Math.floor(minePercent * 10 * 14));
 		} else if (size === "large") {
 			setRows(14);
 			setCols(18);
 			setMines(Math.floor(minePercent * 14 * 18));
-			setImMines(Math.floor(minePercent * 14 * 18));
 		}
 		setSizeMenu(!sizeMenu);
 	}
@@ -386,15 +357,12 @@ export default function Board(props) {
 		if (diff === "easy") {
 			setMinePercent(0.175);
 			setMines(Math.floor(rows * cols * 0.175));
-			setImMines(Math.floor(rows * cols * 0.175));
 		} else if (diff === "medium") {
 			setMinePercent(0.25);
 			setMines(Math.floor(rows * cols * 0.25));
-			setImMines(Math.floor(rows * cols * 0.25));
 		} else if (diff === "hard") {
 			setMinePercent(0.35);
 			setMines(Math.floor(rows * cols * 0.35));
-			setImMines(Math.floor(rows * cols * 0.35));
 		}
 		setSizeMenu(!sizeMenu);
 	}
@@ -495,16 +463,12 @@ export default function Board(props) {
 								src={imflag}
 								alt="flags"
 							/>
-							<div className="flag-count">
-								{imMines - imFlagCount}
-							</div>
+							<div className="flag-count">{imFlagCount}</div>
 						</div>
 					) : (
 						<div style={{ display: "flex", alignItems: "center" }}>
 							<img className="flag-logo" src={flag} alt="flags" />
-							<div className="flag-count">
-								{mines - flagCount}
-							</div>
+							<div className="flag-count">{flagCount}</div>
 						</div>
 					)}
 
@@ -570,9 +534,7 @@ export default function Board(props) {
 													true
 												)
 											}
-											onRight={(bool) =>
-												incFlag(bool, true)
-											}
+											incFlag={(inc) => incImFlag(inc)}
 											clickMine={() => clickMine()}
 											isGameOver={() => getGameOver()}
 											isWinner={() => getWinner()}
@@ -638,9 +600,7 @@ export default function Board(props) {
 													false
 												)
 											}
-											onRight={(bool) =>
-												incFlag(bool, false)
-											}
+											incFlag={(inc) => incFlag(inc)}
 											clickMine={() => clickMine()}
 											isGameOver={() => getGameOver()}
 											isWinner={() => getWinner()}
