@@ -8,29 +8,60 @@ import imbomb from "./images/labombaimaginary.png";
 import { useEffect } from "react";
 
 const Square = forwardRef(function Square(props, ref) {
-	const [value, setValue] = useState(props.value);
+	const [value, setValue] = useState("");
 	const [revealed, setRevealed] = useState(props.revealed);
 	const [isFlagged, setIsFlagged] = useState(false);
-	const [imValue, setImValue] = useState("");
-	const [nValue, setNValue] = useState("");
+	const [autoClicked, setAutoClicked] = useState(false);
 
 	useEffect(() => {
-		let arr = String(value).split(" + ");
+		console.log(props.value, nValue(value), imValue(value));
+		if (props.imaginary) {
+			if (!autoClicked && revealed && imValue(value) === "") {
+				console.log("clicking im");
+				props.clickAround(props.row, props.col);
+				setAutoClicked(true);
+			}
+		} else {
+			if (!autoClicked && revealed && nValue(value) === "") {
+				console.log("clicking norm");
+				props.clickAround(props.row, props.col);
+				setAutoClicked(true);
+			}
+		}
+	}, [autoClicked, props, revealed, value]);
+
+	function imValue(val) {
+		if (!val) return "";
+		let arr = String(val).split(" + ");
 		if (arr.length > 1) {
-			setImValue(
+			console.log(
 				String(arr[1]).split("i")[0] > 0
 					? String(arr[1]).split("i")[0]
 					: ""
 			);
-			setNValue(arr[0] > 0 ? arr[0] : "");
+			return String(arr[1]).split("i")[0] > 0
+				? String(arr[1]).split("i")[0]
+				: "";
 		} else {
 			if (String(arr[0]).includes("i")) {
-				setImValue(String(arr[0]).split("i")[0]);
-			} else {
-				setNValue(arr[0]);
+				return String(arr[0]).split("i")[0];
 			}
 		}
-	}, [value]);
+		return "";
+	}
+	//gets the real number part of the value assigned to the square
+	function nValue(val) {
+		if (!val) return "";
+		let arr = String(val).split(" + ");
+		if (arr.length > 1) {
+			return arr[0] > 0 ? arr[0] : "";
+		} else {
+			if (!String(arr[0]).includes("i")) {
+				return arr[0];
+			}
+		}
+		return "";
+	}
 
 	function getChecker() {
 		if (props.row % 2 === 0) {
@@ -71,7 +102,7 @@ const Square = forwardRef(function Square(props, ref) {
 				},
 				click() {
 					if (!isFlagged && !props.isGameOver()) {
-						if (value === -1) {
+						if (props.value === -1) {
 							setRevealed(!revealed);
 							props.clickMine();
 						} else {
@@ -82,7 +113,7 @@ const Square = forwardRef(function Square(props, ref) {
 				},
 			};
 		},
-		[revealed, isFlagged, props, value]
+		[revealed, isFlagged, props]
 	);
 	if (props.imView() === props.imaginary) {
 		if (revealed) {
@@ -97,7 +128,9 @@ const Square = forwardRef(function Square(props, ref) {
 						(props.hidden ? "hide " : "show ")
 					}
 					onClick={() => {
-						if (value !== 0) {
+						console.log(value);
+
+						if (props.value !== 0) {
 							props.clickAround(props.row, props.col);
 						}
 					}}
@@ -111,22 +144,7 @@ const Square = forwardRef(function Square(props, ref) {
 					) : (
 						<></>
 					)}
-					{value === -1 || value === 0 ? (
-						""
-					) : (
-						<div>
-							<span className={nValue}>
-								{nValue > 0 ? nValue : ""}
-							</span>
-							<span>
-								{imValue > 0 && nValue > 0 ? " + " : ""}
-							</span>
-							<span className={imValue}>
-								{imValue > 0 ? imValue + "i" : ""}
-							</span>
-						</div>
-					)}
-					{value === -1 ? (
+					{props.value === -1 ? (
 						<img
 							src={props.imaginary ? imbomb : bomb}
 							alt="bomb"
@@ -137,7 +155,17 @@ const Square = forwardRef(function Square(props, ref) {
 							}}
 						/>
 					) : (
-						<></>
+						<div>
+							<span className={nValue(value)}>
+								{nValue(value) ? nValue(value) : ""}
+							</span>
+							<span>
+								{imValue(value) && nValue(value) ? " + " : ""}
+							</span>
+							<span className={imValue(value)}>
+								{imValue(value) ? imValue(value) + "i" : ""}
+							</span>
+						</div>
 					)}
 				</button>
 			);
@@ -153,7 +181,7 @@ const Square = forwardRef(function Square(props, ref) {
 					}
 					onClick={() => {
 						if (!isFlagged && !props.isGameOver()) {
-							if (value === -1) {
+							if (props.value === -1) {
 								setRevealed(!revealed);
 								props.clickMine();
 							} else {

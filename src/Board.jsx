@@ -106,19 +106,19 @@ export default function Board(props) {
 		return gameOver;
 	}
 
-	function incFlag(bool) {
-		if (bool) {
-			setFlagCount(flagCount + 1);
+	function incFlag(bool, im) {
+		if (im) {
+			if (bool) {
+				setFlagCount(flagCount + 1);
+			} else {
+				setFlagCount(flagCount - 1);
+			}
 		} else {
-			setFlagCount(flagCount - 1);
-		}
-	}
-
-	function incImFlag(bool) {
-		if (bool) {
-			setImFlagCount(imFlagCount + 1);
-		} else {
-			setImFlagCount(imFlagCount - 1);
+			if (bool) {
+				setImFlagCount(imFlagCount + 1);
+			} else {
+				setImFlagCount(imFlagCount - 1);
+			}
 		}
 	}
 
@@ -221,7 +221,7 @@ export default function Board(props) {
 	}
 
 	function generateMines(row, col) {
-		let tempBoard = board;
+		let tempBoard = board.slice();
 		let i = 0;
 		while (i < mines) {
 			let newRow = getRandomInt(rows);
@@ -250,7 +250,7 @@ export default function Board(props) {
 			}
 		}
 		setBoard(tempBoard);
-		let tempImBoard = imaginaryBoard;
+		let tempImBoard = imaginaryBoard.slice();
 		i = 0;
 		while (i < mines) {
 			let newRow = getRandomInt(rows);
@@ -286,141 +286,42 @@ export default function Board(props) {
 		return Math.floor(Math.random() * max);
 	}
 
-	async function clickSquare(pos, first) {
+	async function clickSquare(pos, first, im) {
+		//console.log("clicked " + pos);
 		let row = pos.split(" ")[0];
 		let col = pos.split(" ")[1];
 		if (first) {
 			timerRef.current.resetTime();
 			timerRef.current.startTime();
 			generateMines(row, col);
-		}
-		setFirstClick(false);
-		let fromZero = 0;
-		if (board[row][col] === 0) {
-			fromZero += (
-				await clearAdjacent(parseInt(row), parseInt(col))
-			).valueOf();
-			fromZero += (await updateSides()).valueOf();
-			await updateFlags();
+			setFirstClick(false);
+			first = false;
+			clickSquare(pos, first, im);
 		}
 		await updateSquares();
-		if (checkWinner(1 + fromZero)) {
+		updateFlags();
+		if (checkWinner()) {
 			setWinner(true);
 			setGameOver(true);
 			timerRef.current.endTime();
 		}
-	}
-
-	async function clickImSquare(pos, first) {
-		let row = pos.split(" ")[0];
-		let col = pos.split(" ")[1];
-		if (first) {
-			timerRef.current.resetTime();
-			timerRef.current.startTime();
-			generateMines(row, col);
-		}
-		setFirstClick(false);
-		let fromZero = 0;
-		if (imaginaryBoard[row][col] === 0) {
-			fromZero += (
-				await clearImAdjacent(parseInt(row), parseInt(col))
-			).valueOf();
-			fromZero += (await updateImSides()).valueOf();
-			await updateImFlags();
-		}
-		await updateSquares();
-		if (checkWinner(1 + fromZero)) {
-			setWinner(true);
-			setGameOver(true);
-			timerRef.current.endTime();
-		}
-	}
-
-	async function updateSides() {
-		let ticked = 0;
-		for (let i = 0; i < rows; i++) {
-			for (let j = 0; j < cols; j++) {
-				if (isAdjacentTo(i, j, 0) && !getRef(i, j).getStatus()) {
-					getRef(i, j).reveal();
-					ticked++;
-					if (board[i][j] === 0) {
-						clickSquare(i + " " + j, false);
-					}
-				}
-			}
-		}
-		return ticked;
-	}
-
-	async function updateImSides() {
-		let ticked = 0;
-		for (let i = 0; i < rows; i++) {
-			for (let j = 0; j < cols; j++) {
-				if (isImAdjacentTo(i, j, 0) && !getImRef(i, j).getStatus()) {
-					getImRef(i, j).reveal();
-					ticked++;
-					if (imaginaryBoard[i][j] === 0) {
-						clickImSquare(i + " " + j, false);
-					}
-				}
-			}
-		}
-		return ticked;
 	}
 
 	async function updateFlags() {
 		let tempFlag = 0;
+		let tempImFlag = 0;
 		for (let i = 0; i < rows; i++) {
 			for (let j = 0; j < cols; j++) {
 				if (getRef(i, j).getFlagStatus()) {
 					tempFlag++;
 				}
-			}
-		}
-		setFlagCount(tempFlag);
-	}
-	async function updateImFlags() {
-		let tempFlag = 0;
-		for (let i = 0; i < rows; i++) {
-			for (let j = 0; j < cols; j++) {
 				if (getImRef(i, j).getFlagStatus()) {
-					tempFlag++;
+					tempImFlag++;
 				}
 			}
 		}
-		setImFlagCount(tempFlag);
-	}
-
-	function isAdjacentTo(row, col, adjValue) {
-		for (let i = -1; i < 2; i++) {
-			for (let j = -1; j < 2; j++) {
-				if (inBounds(row + i, col + j)) {
-					if (
-						board[row + i][col + j] === 0 &&
-						getRef(row + i, col + j).getStatus()
-					) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-	function isImAdjacentTo(row, col, adjValue) {
-		for (let i = -1; i < 2; i++) {
-			for (let j = -1; j < 2; j++) {
-				if (inBounds(row + i, col + j)) {
-					if (
-						imaginaryBoard[row + i][col + j] === 0 &&
-						getImRef(row + i, col + j).getStatus()
-					) {
-						return true;
-					}
-				}
-			}
-		}
-		return false;
+		setImFlagCount(tempImFlag);
+		setFlagCount(tempFlag);
 	}
 
 	function getWinner() {
@@ -498,82 +399,24 @@ export default function Board(props) {
 		setSizeMenu(!sizeMenu);
 	}
 
-	async function clearAdjacent(row, col) {
-		let ticked = 0;
-		for (let i = -1; i < 2; i += 2) {
-			if (col + i >= 0 && col + i < cols) {
-				if (
-					board[row][col + i] === 0 &&
-					!getRef(row, col + i).getStatus()
-				) {
-					await getRef(row, col + i).reveal();
-					ticked++;
-					ticked += (await clearAdjacent(row, col + i)).valueOf();
-				}
-			}
-
-			if (row + i >= 0 && row + i < rows) {
-				if (
-					board[row + i][col] === 0 &&
-					!getRef(row + i, col).getStatus()
-				) {
-					await getRef(row + i, col).reveal();
-					ticked++;
-					ticked += (await clearAdjacent(row + i, col)).valueOf();
-				}
-			}
-		}
-		return ticked;
-	}
-	async function clearImAdjacent(row, col) {
-		let ticked = 0;
-		for (let i = -1; i < 2; i += 2) {
-			if (col + i >= 0 && col + i < cols) {
-				if (
-					imaginaryBoard[row][col + i] === 0 &&
-					!getImRef(row, col + i).getStatus()
-				) {
-					await getImRef(row, col + i).reveal();
-					ticked++;
-					ticked += (await clearImAdjacent(row, col + i)).valueOf();
-				}
-			}
-
-			if (row + i >= 0 && row + i < rows) {
-				if (
-					imaginaryBoard[row + i][col] === 0 &&
-					!getImRef(row + i, col).getStatus()
-				) {
-					await getImRef(row + i, col).reveal();
-					ticked++;
-					ticked += (await clearImAdjacent(row + i, col)).valueOf();
-				}
-			}
-		}
-		return ticked;
-	}
-
 	function inBounds(row, col) {
 		return row >= 0 && col >= 0 && col < cols && row < rows;
 	}
 
-	function clickAround(row, col) {
+	async function clickAround(row, col, im) {
+		row = parseInt(row);
+		col = parseInt(col);
 		for (let i = -1; i < 2; i++) {
 			for (let j = -1; j < 2; j++) {
 				if (inBounds(row + i, col + j)) {
-					if (!getRef(row + i, col + j).getStatus()) {
-						getRef(row + i, col + j).click();
-					}
-				}
-			}
-		}
-	}
-	function clickImAround(row, col) {
-		for (let i = -1; i < 2; i++) {
-			for (let j = -1; j < 2; j++) {
-				if (inBounds(row + i, col + j)) {
-					if (!getImRef(row + i, col + j).getStatus()) {
-						getImRef(row + i, col + j).click();
+					if (im) {
+						if (!getImRef(row + i, col + j).getStatus()) {
+							getImRef(row + i, col + j)?.click();
+						}
+					} else {
+						if (!getRef(row + i, col + j).getStatus()) {
+							await getRef(row + i, col + j).click();
+						}
 					}
 				}
 			}
@@ -721,9 +564,15 @@ export default function Board(props) {
 												}
 											}}
 											onClick={(pos) =>
-												clickImSquare(pos, firstClick)
+												clickSquare(
+													pos,
+													firstClick,
+													true
+												)
 											}
-											onRight={(bool) => incImFlag(bool)}
+											onRight={(bool) =>
+												incFlag(bool, true)
+											}
 											clickMine={() => clickMine()}
 											isGameOver={() => getGameOver()}
 											isWinner={() => getWinner()}
@@ -731,7 +580,7 @@ export default function Board(props) {
 												return imaginaryView;
 											}}
 											clickAround={(row, col) => {
-												clickImAround(row, col);
+												clickAround(row, col, true);
 											}}
 										/>
 									);
@@ -783,9 +632,15 @@ export default function Board(props) {
 												}
 											}}
 											onClick={(pos) =>
-												clickSquare(pos, firstClick)
+												clickSquare(
+													pos,
+													firstClick,
+													false
+												)
 											}
-											onRight={(bool) => incFlag(bool)}
+											onRight={(bool) =>
+												incFlag(bool, false)
+											}
 											clickMine={() => clickMine()}
 											isGameOver={() => getGameOver()}
 											isWinner={() => getWinner()}
@@ -793,7 +648,7 @@ export default function Board(props) {
 												return imaginaryView;
 											}}
 											clickAround={(row, col) => {
-												clickAround(row, col);
+												clickAround(row, col, false);
 											}}
 										/>
 									);
