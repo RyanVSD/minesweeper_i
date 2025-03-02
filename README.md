@@ -1,2 +1,1 @@
-Link to game
-https://ryanvirtue619.github.io/minesweeper_i/
+Link to game [here](https://ryanvsd.github.io/minesweeper_i/)
